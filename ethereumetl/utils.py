@@ -22,6 +22,9 @@
 
 
 import itertools
+import json
+import logging
+import sys
 import warnings
 
 from ethereumetl.misc.retriable_value_error import RetriableValueError
@@ -66,9 +69,19 @@ def validate_range(range_start_incl, range_end_incl):
         raise ValueError('range_end must be greater or equal to range_start')
 
 
-def rpc_response_batch_to_results(response):
+def rpc_response_batch_to_results(response, request=None, block=None):
     for response_item in response:
-        yield rpc_response_to_result(response_item)
+        try:
+            yield rpc_response_to_result(response_item)
+        except RetriableValueError as e:
+            if request:
+            #     logging.warning(f"AHH!: {response_item} // {request[response_item['id']]}")
+            #     logging.warning(f"{json.dumps(response)[:2000]}")
+                if block:
+                    logging.warning(f"block: {block.number} -- {request[response_item['id']]}")
+            else:
+                raise e
+
 
 
 def rpc_response_to_result(response):

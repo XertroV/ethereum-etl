@@ -47,3 +47,7 @@ coverage.xml
 .venv
 venv/
 ENV/
+.last_batch_started
+*.csv
+/*.txt
+.provider_uri

@@ -39,6 +39,7 @@ class EthTransactionMapper(object):
         transaction.value = hex_to_dec(json_dict.get('value'))
         transaction.gas = hex_to_dec(json_dict.get('gas'))
         transaction.gas_price = hex_to_dec(json_dict.get('gasPrice'))
+        transaction.gas_used = 0  # must be replaced later if required
         transaction.input = json_dict.get('input')
         transaction.max_fee_per_gas = hex_to_dec(json_dict.get('maxFeePerGas'))
         transaction.max_priority_fee_per_gas = hex_to_dec(json_dict.get('maxPriorityFeePerGas'))
@@ -59,6 +60,7 @@ class EthTransactionMapper(object):
             'value': transaction.value,
             'gas': transaction.gas,
             'gas_price': transaction.gas_price,
+            'gas_used': transaction.gas_used,
             'input': transaction.input,
             'max_fee_per_gas': transaction.max_fee_per_gas,
             'max_priority_fee_per_gas': transaction.max_priority_fee_per_gas,

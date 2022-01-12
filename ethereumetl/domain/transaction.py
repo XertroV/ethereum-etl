@@ -33,6 +33,7 @@ class EthTransaction(object):
         self.value = None
         self.gas = None
         self.gas_price = None
+        self.gas_used = None
         self.input = None
         self.max_fee_per_gas = None
         self.max_priority_fee_per_gas = None
