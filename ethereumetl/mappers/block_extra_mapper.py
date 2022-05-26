@@ -87,5 +87,6 @@ class EthBlockMapper(object):
             'tx_fees': block.tx_fees,
             'timestamp': block.timestamp,
             'transaction_count': block.transaction_count,
-            'base_fee_per_gas': block.base_fee_per_gas
+            'base_fee_per_gas': block.base_fee_per_gas,
+            'uncle_count': block.uncle_count,
         }

@@ -43,7 +43,8 @@ BLOCK_FIELDS_TO_EXPORT = [
     'tx_fees',
     'timestamp',
     'transaction_count',
-    'base_fee_per_gas'
+    'base_fee_per_gas',
+    'uncle_count'
 ]
 
 TRANSACTION_FIELDS_TO_EXPORT = [

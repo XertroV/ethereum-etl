@@ -27,7 +27,7 @@ import logging
 from ethereumetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
 from ethereumetl.jobs.export_receipts_job import ExportReceiptsJob
-from ethereumetl.json_rpc_requests import generate_get_block_by_number_json_rpc, generate_get_receipt_json_rpc
+from ethereumetl.json_rpc_requests import generate_get_block_by_number_json_rpc, generate_get_block_uncle_count_by_number_json_rpc, generate_get_receipt_json_rpc
 from ethereumetl.mappers.block_extra_mapper import EthBlockMapper
 from ethereumetl.mappers.transaction_mapper import EthTransactionMapper
 from ethereumetl.utils import hex_to_dec, rpc_response_batch_to_results, validate_range
@@ -119,6 +119,7 @@ class ExportBlocksExtraJob(BaseJob):
         # print(results[:2])
         blocks = [self.block_mapper.json_dict_to_block(result) for result in results]
 
+        # handle transaction fees
         for block in blocks:
             tx_hashes = list(tx.hash for tx in block.transactions if tx.hash not in BROKEN_TXS)
             # if we have no txids then shortcut the rest
@@ -137,6 +138,13 @@ class ExportBlocksExtraJob(BaseJob):
             # logging.info(f"{block.transactions[-1].gas_used}")
             block.tx_fees = sum(tx.gas_price * tx.gas_used for tx in block.transactions)
             # logging.info(f"{block.number} >> {block.tx_fees}")
+
+        # update with uncle count
+        uncles_rpc = list(generate_get_block_uncle_count_by_number_json_rpc(block_number_batch))
+        response = self.batch_web3_provider.make_batch_request(json.dumps(uncles_rpc))
+        results = list(rpc_response_batch_to_results(response))
+        for (block, uncle_count) in zip(blocks, results):
+            block.uncle_count = hex_to_dec(uncle_count)
 
         for block in blocks:
             self._export_block(block)

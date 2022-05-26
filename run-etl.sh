@@ -5,7 +5,8 @@ set -e
 
 # set the contents of this file to be x where x*100_000 = the block number you want to start at; e.g.: `35` will start at block 3_500_000
 export START_AT=$(cat ./.last_batch_started)
-export END_AT=1501
+# export END_AT=1501
+export END_AT=9999
 # benchmark (start_at=35 w/ 100k chunk size)
 # 1000,8: Took 0:03:08.529603
 # 1000,12: Took 0:02:51.697720

@@ -21,6 +21,9 @@
 # SOFTWARE.
 
 
+from typing import Optional
+
+
 class EthBlock(object):
     def __init__(self):
         self.number = None
@@ -41,7 +44,8 @@ class EthBlock(object):
         self.gas_used = None
         self.timestamp = None
 
-        self.tx_fees = None
+        self.tx_fees: Optional[int] = None
+        self.uncle_count: Optional[int] = None
 
         self.transactions = []
         self.transaction_count = 0
