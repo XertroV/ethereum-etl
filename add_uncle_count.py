@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 def run_file(file_ix: int, file: str, n_files: int, batch_size: int, provider_uri: str):
     batch_web3_provider=ThreadLocalProxy(lambda: get_provider_from_uri(provider_uri, batch=True))
-    _lp = f"[F {file_ix} / {n_files}]"  # log prefix
+    _lp = f"[F {file_ix+1} / {n_files}]"  # log prefix
     info = lambda msg: logging.info(f"{_lp} {msg}")
 
     with open(file, 'r') as f:
@@ -46,7 +46,7 @@ def run_file(file_ix: int, file: str, n_files: int, batch_size: int, provider_ur
         response = batch_web3_provider.make_batch_request(json.dumps(uncles_rpc))
         results = list(hex_to_dec(uc) for uc in rpc_response_batch_to_results(response))
         uncle_counts.extend(results)
-        info(f"RPC batches done: {i} of {n_batches}")
+        info(f"RPC batches done: {i+1} of {n_batches}")
 
     for (r, uncle_count) in zip(rows, uncle_counts):
         r['uncle_count'] = uncle_count
